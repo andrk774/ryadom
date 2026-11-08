@@ -576,6 +576,9 @@ const routes = [
 ];
 
 async function render() {
+  // A hash change can arrive before the initial session/meta requests finish.
+  // start() renders the latest URL once both are available.
+  if (!state.meta) return;
   const token = ++renderToken;
   const isCurrent = () => token === renderToken;
   stopPolling?.();

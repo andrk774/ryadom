@@ -77,6 +77,7 @@ try {
   assert.equal(app.db.prepare('SELECT COUNT(*) AS n FROM drafts').get().n, 0);
   app.db.prepare("UPDATE users SET role = 'admin' WHERE id = ?").run(seller.id);
   await page.reload();
+  await page.locator('#nav a[href="#/admin"]').waitFor();
   await page.goto(base + '/#/admin');
   await page.waitForSelector('[data-moderate=approved]');
   await page.locator('[data-moderate=approved]').click();
@@ -154,6 +155,15 @@ try {
   await buyer.waitForSelector('#editor');
   assert.equal(await buyer.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'editor fits mobile');
   await buyer.screenshot({path:'.qa/mobile-editor.png',fullPage:true});
+  const raceContext = await browser.newContext({storageState:await page.context().storageState()});
+  const race = await raceContext.newPage();
+  let releaseSession;
+  const sessionGate = new Promise(resolve=>{releaseSession=resolve;});
+  await race.route('**/api/me',async route=>{await sessionGate;await route.continue();});
+  await race.goto(base+'/#/');
+  await race.evaluate(async()=>{location.hash='#/admin';await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+  releaseSession();
+  await race.getByRole('heading',{name:'Модерация',exact:true}).waitFor();
   const challenge = await browser.newPage();
   challenge.on('pageerror',error=>errors.push(error.message));
   await challenge.addInitScript(()=>{
@@ -168,6 +178,16 @@ try {
   await challenge.waitForSelector('#save-search');
   assert.deepEqual(errors, []);
   console.log('Browser smoke passed: account, verification, settings, uploads, drafts, moderation, notifications, chat blocking, stats, location, operations, CAPTCHA and mobile layouts.');
+} catch (error) {
+  fs.mkdirSync('.qa', {recursive:true});
+  if (browser) {
+    let i=0;
+    for (const context of browser.contexts()) for (const page of context.pages()) {
+      await page.screenshot({path:`.qa/failure-${i++}.png`,fullPage:true}).catch(()=>{});
+    }
+  }
+  console.error('Browser errors:',errors);
+  throw error;
 } finally {
   await browser?.close(); await app.close();
   assert.equal(path.dirname(path.resolve(dir)), tempRoot);
