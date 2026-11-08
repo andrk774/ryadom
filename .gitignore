@@ -1,0 +1,17 @@
+node_modules/
+data/
+*.log
+.npm-cache/
+.qa/
+.env
+.backups/
+.env.*
+!.env.example
+*.db
+*.db-*
+*.bak
+backups/
+original-hashes.json
+edit-release.py
+edit-ui.py
+apply-release.ps1

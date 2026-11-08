@@ -1,0 +1,28 @@
+{
+  "name": "ryadom",
+  "version": "0.3.0",
+  "description": "Рядом — сервис частных объявлений",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test",
+    "admin": "node --disable-warning=ExperimentalWarning scripts/admin.mjs",
+    "test:browser": "node --disable-warning=ExperimentalWarning scripts/browser-smoke.mjs",
+    "backup": "node --disable-warning=ExperimentalWarning scripts/maintenance.mjs backup",
+    "backup:verify": "node --disable-warning=ExperimentalWarning scripts/maintenance.mjs verify",
+    "restore": "node --disable-warning=ExperimentalWarning scripts/maintenance.mjs restore",
+    "cleanup": "node --disable-warning=ExperimentalWarning scripts/maintenance.mjs cleanup"
+  },
+  "dependencies": {
+    "nodemailer": "^10.4.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "playwright": "^1.65.0"
+  }
+}

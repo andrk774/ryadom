@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Рядом — объявления от людей поблизости</title>
+  <meta name="description" content="Покупайте и продавайте вещи, авто и услуги рядом с домом.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="logo" href="#/"><span class="logo-mark" aria-hidden="true"></span>Рядом</a>
+      <form id="search" class="search" role="search">
+        <input name="q" type="search" placeholder="Что ищете? Например, велосипед" aria-label="Поиск по объявлениям" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Найти</button>
+      </form>
+      <nav id="nav" class="nav" aria-label="Основное меню"></nav>
+    </div>
+  </header>
+  <main id="view" class="page"></main>
+  <footer class="footer">
+    <div class="page-inner">Рядом — объявления от людей поблизости. Встречайтесь в людных местах и не переводите предоплату незнакомцам.</div>
+  </footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
